@@ -22,7 +22,7 @@ let largura_janela = 1000 / janelas
 let altura_janela = 800 / processos.length
 
 
-// funcao do P5 que inicia 
+// funcao do P5 que inicia
 function setup(){
 	// cria uma tela
 	createCanvas(1000, 800)
@@ -38,7 +38,7 @@ function setup(){
 
 
 function desenhar_moldura(){
-	
+
 	// percorre as janelas necessarias para processar tudo
 	for(let i = 0; i < janelas; i++){
 		// bota quantas linhas vao ser necessarias (um projeto = uma linha)
@@ -61,27 +61,24 @@ function desenhar_processo(i, j, indice_do_processo){
 
 function desenhar_processos(){
 
-	// FIFO
-
-	// Indice do processo
-	let indice = 0
+	// Round-robin
 
 	// Etapa de computacao
 	let indicejanela = 0
 
-
 	while(processos.reduce(reducer) != 0){
-		// desenha o processo na tabela e reduz o tempo ja computado 
-		desenhar_processo(indicejanela, indice, indice)
-		processos[indice] -= quantum
 
-		// se o processo terminou de ser computado, seguiremos em frente
-		if(processos[indice] == 0){
-			indice ++
+		//Checa todo o ciclo de processos
+		for (let indice = 0; indice < processos.length; indice++) {
+			//Se o processo não tive terminado, dá mais um quantum para que ele possa executar
+			if (processos[indice] != 0) {
+				//Desenha o processo na tabela e reduz o tempo já computado
+				desenhar_processo(indicejanela, indice, indice)
+				processos[indice] -= quantum
+
+				//Incrementa a etapa de computação
+				indicejanela++
+			}
 		}
-
-		// a cada rodada do while, devemos incrementar a etapa de computacao
-		indicejanela++
 	}
-
 }
